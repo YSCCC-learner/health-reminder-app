@@ -923,6 +923,12 @@
                         <button class="time-option" data-time="60">60分钟</button>
                     </div>
                 </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;">
+                    <button class="btn btn-secondary" id="previewBtn" style="font-size: 14px; padding: 10px 20px;">
+                        🎬 预览动画效果
+                    </button>
+                </div>
             </div>
 
             <!-- 统计卡片 -->
@@ -1532,6 +1538,12 @@
             opt.addEventListener('click', () => {
                 selectTime(parseInt(opt.dataset.time));
             });
+        });
+
+        // 预览动画按钮
+        document.getElementById('previewBtn').addEventListener('click', () => {
+            elements.sitMinutes.textContent = state.selectedTime;
+            elements.modalOverlay.classList.add('active');
         });
 
         // 初始化

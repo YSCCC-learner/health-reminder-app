@@ -21,13 +21,14 @@
         :root {
             --primary: #667eea;
             --primary-dark: #5a67d8;
-            --secondary: #f093fb;
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-primary: #2d3748;
             --text-secondary: #718096;
             --success: #48bb78;
             --warning: #ed8936;
+            --focus-purple: #9f7aea;
+            --focus-dark: #1a1a2e;
         }
 
         body {
@@ -54,40 +55,64 @@
             position: relative;
         }
 
-        .header {
+        /* 模式切换标签 */
+        .mode-tabs {
+            display: flex;
             background: var(--bg-gradient);
-            padding: 20px;
-            padding-top: 10px;
-            color: white;
-            text-align: center;
+            padding: 0 20px 15px;
+            gap: 10px;
         }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 700;
+        .mode-tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .mode-tab.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        .mode-tab span {
+            display: block;
+            font-size: 20px;
             margin-bottom: 4px;
         }
 
-        .header p {
-            font-size: 13px;
-            opacity: 0.9;
-        }
-
+        /* 主内容区 */
         .main-content {
             flex: 1;
             padding: 20px;
             padding-bottom: 100px;
         }
 
-        /* 计时器卡片 */
-        .timer-card {
+        .mode-content {
+            display: none;
+        }
+
+        .mode-content.active {
+            display: block;
+        }
+
+        /* 通用卡片样式 */
+        .timer-card, .stats-card, .badges-card, .tips-card, .focus-card, .game-card {
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 30px;
+            padding: 24px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
+        /* ========== 健康模式 ========== */
         .timer-display {
             text-align: center;
             margin-bottom: 30px;
@@ -168,20 +193,11 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
         }
 
         .btn-secondary {
             background: #edf2f7;
             color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
         }
 
         .btn:disabled {
@@ -221,25 +237,328 @@
             transition: all 0.2s;
         }
 
-        .time-option:hover {
-            background: #e2e8f0;
-        }
-
         .time-option.active {
             background: rgba(102, 126, 234, 0.1);
             border-color: var(--primary);
             color: var(--primary);
         }
 
-        /* 统计卡片 */
-        .stats-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        .preview-btn {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .preview-btn .btn {
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        /* ========== 专注模式 ========== */
+        .focus-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .focus-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .focus-card p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
             margin-bottom: 20px;
         }
 
+        .focus-timer-display {
+            font-size: 72px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(159, 122, 234, 0.5);
+        }
+
+        .focus-timer-status {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 25px;
+        }
+
+        .focus-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .focus-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--focus-purple), #b794f4);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .focus-reason {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .focus-reason-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .focus-reason-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .focus-reason-input:focus {
+            outline: none;
+        }
+
+        .focus-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .focus-controls .btn {
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .btn-focus-start {
+            background: linear-gradient(135deg, #9f7aea 0%, #b794f4 100%);
+        }
+
+        .btn-focus-cancel {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* 专注锁屏 */
+        .focus-lock-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .focus-lock-overlay.active {
+            display: flex;
+        }
+
+        .focus-lock-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: focusFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes focusFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .focus-lock-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .focus-lock-subtitle {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+        }
+
+        .focus-lock-timer {
+            font-size: 100px;
+            font-weight: 700;
+            color: white;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 50px rgba(159, 122, 234, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .focus-lock-reason {
+            font-size: 18px;
+            color: var(--focus-purple);
+            margin-bottom: 40px;
+            padding: 15px 25px;
+            background: rgba(159, 122, 234, 0.2);
+            border-radius: 12px;
+        }
+
+        .focus-lock-warning {
+            background: rgba(237, 100, 100, 0.2);
+            border: 1px solid rgba(237, 100, 100, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            max-width: 300px;
+        }
+
+        .focus-lock-warning p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+        }
+
+        .focus-lock-warning strong {
+            color: #fc8181;
+        }
+
+        .focus-lock-quit {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            margin-top: 20px;
+        }
+
+        /* ========== 趣味游戏区 ========== */
+        .game-card {
+            text-align: center;
+        }
+
+        .game-card h3 {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pet-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .pet-emoji {
+            font-size: 80px;
+            animation: petBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes petBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        .pet-level {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f6e05e 0%, #ed8936 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(237, 137, 54, 0.4);
+        }
+
+        .pet-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pet-stat {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .pet-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .pet-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .pet-feed-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.2s;
+        }
+
+        .pet-feed-btn:active {
+            transform: scale(0.98);
+        }
+
+        .pet-feed-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 专注徽章墙 */
+        .focus-badges {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .focus-badge {
+            text-align: center;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .focus-badge.locked {
+            filter: grayscale(1);
+            opacity: 0.4;
+        }
+
+        .focus-badge-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .focus-badge-name {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== 统计卡片 ========== */
         .stats-header {
             display: flex;
             align-items: center;
@@ -265,10 +584,6 @@
             border-radius: 4px;
         }
 
-        .reset-btn:hover {
-            background: #edf2f7;
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -283,7 +598,7 @@
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--primary);
         }
@@ -292,25 +607,29 @@
             color: #ed8936;
         }
 
+        .stat-value.energy {
+            color: #48bb78;
+        }
+
         .stat-label {
             font-size: 11px;
             color: var(--text-secondary);
             margin-top: 4px;
         }
 
-        /* 连续打卡展示 */
+        /* 连续打卡 */
         .streak-banner {
             margin-top: 15px;
             padding: 12px 16px;
             background: linear-gradient(135deg, #fed7aa 0%, #fbd38d 100%);
             border-radius: 12px;
             display: none;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .streak-banner.active {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .streak-info {
@@ -319,30 +638,13 @@
             gap: 8px;
         }
 
-        .streak-icon {
-            font-size: 24px;
-        }
-
         .streak-text {
             font-size: 14px;
             font-weight: 600;
             color: #c05621;
         }
 
-        .streak-subtext {
-            font-size: 11px;
-            color: #dd6b20;
-        }
-
-        /* 徽章卡片 */
-        .badges-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
+        /* ========== 徽章卡片 ========== */
         .badges-header {
             display: flex;
             align-items: center;
@@ -396,28 +698,17 @@
         }
 
         .badge-icon {
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 6px;
         }
 
         .badge-name {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
             font-weight: 500;
         }
 
-        .badge-item.unlocked .badge-name {
-            color: var(--text-primary);
-        }
-
-        /* 健康动作提示卡 */
-        .tips-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
+        /* ========== 健康提示 ========== */
         .tips-card h3 {
             font-size: 16px;
             color: var(--text-primary);
@@ -468,7 +759,7 @@
             line-height: 1.5;
         }
 
-        /* 提醒弹窗 */
+        /* ========== 弹窗 ========== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -536,12 +827,11 @@
             margin-bottom: 20px;
         }
 
-        /* 3D 动画引导区域 */
+        /* 3D 动画引导 */
         .exercise-guides {
             margin-bottom: 20px;
         }
 
-        /* 3D 动画容器 */
         .exercise-guide {
             display: flex;
             align-items: center;
@@ -559,130 +849,6 @@
             margin-bottom: 0;
         }
 
-        /* 3D 动画场景 */
-        .animation-scene {
-            width: 70px;
-            height: 70px;
-            perspective: 300px;
-            flex-shrink: 0;
-        }
-
-        .animation-cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: floatCube 3s ease-in-out infinite;
-        }
-
-        @keyframes floatCube {
-            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
-            50% { transform: translateY(-8px) rotateX(5deg) rotateY(5deg); }
-        }
-
-        /* 眼睛动画 */
-        .eye-scene .animation-cube {
-            animation: eyeLook 4s ease-in-out infinite;
-        }
-
-        @keyframes eyeLook {
-            0%, 100% { transform: translateX(0) rotateY(0); }
-            25% { transform: translateX(-10px) rotateY(-15deg); }
-            75% { transform: translateX(10px) rotateY(15deg); }
-        }
-
-        /* 伸展动画 */
-        .stretch-scene .animation-cube {
-            animation: stretchBody 2s ease-in-out infinite;
-        }
-
-        @keyframes stretchBody {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.15) rotate(-5deg); }
-        }
-
-        /* 走路动画 */
-        .walk-scene .animation-cube {
-            animation: walkMove 1s ease-in-out infinite;
-        }
-
-        @keyframes walkMove {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-12px) rotate(3deg); }
-        }
-
-        /* 3D 人物SVG */
-        .person-3d {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-        }
-
-        .person-head {
-            fill: #FFE4C4;
-            transform-origin: center;
-        }
-
-        .person-body {
-            fill: var(--primary);
-            transform-origin: center bottom;
-        }
-
-        .person-arm {
-            fill: var(--primary);
-            transform-origin: center top;
-            animation: armSwing 2s ease-in-out infinite;
-        }
-
-        .person-arm.left {
-            animation-delay: 0s;
-        }
-
-        .person-arm.right {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes armSwing {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(30deg); }
-        }
-
-        /* 眼睛部件动画 */
-        .eye-ball {
-            fill: #2d3748;
-            animation: eyeBlink 3s ease-in-out infinite;
-        }
-
-        @keyframes eyeBlink {
-            0%, 45%, 55%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.1); }
-        }
-
-        /* 腿部走路动画 */
-        .person-leg {
-            fill: #4a5568;
-            transform-origin: center top;
-        }
-
-        .person-leg.left {
-            animation: legSwingLeft 1s ease-in-out infinite;
-        }
-
-        .person-leg.right {
-            animation: legSwingRight 1s ease-in-out infinite;
-        }
-
-        @keyframes legSwingLeft {
-            0%, 100% { transform: rotate(10deg); }
-            50% { transform: rotate(-10deg); }
-        }
-
-        @keyframes legSwingRight {
-            0%, 100% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-        }
-
-        /* 动作光效 */
         .action-glow {
             position: absolute;
             top: 50%;
@@ -714,54 +880,96 @@
             50% { transform: translateY(-50%) scale(1.3); opacity: 0.5; }
         }
 
+        .animation-scene {
+            width: 60px;
+            height: 60px;
+            perspective: 300px;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .animation-cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: floatCube 3s ease-in-out infinite;
+        }
+
+        @keyframes floatCube {
+            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+            50% { transform: translateY(-5px) rotateX(5deg) rotateY(5deg); }
+        }
+
+        .person-3d {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.15));
+        }
+
+        .person-head { fill: #FFE4C4; }
+        .person-body { fill: var(--primary); }
+        .person-arm { fill: var(--primary); transform-origin: center top; }
+        .person-arm.left { animation: armSwing 2s ease-in-out infinite; }
+        .person-arm.right { animation: armSwing 2s ease-in-out infinite 0.5s; }
+
+        @keyframes armSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        .eye-ball { fill: #2d3748; }
+        .person-leg { fill: #4a5568; transform-origin: center top; }
+        .person-leg.left { animation: legSwingLeft 1s ease-in-out infinite; }
+        .person-leg.right { animation: legSwingRight 1s ease-in-out infinite; }
+
+        @keyframes legSwingLeft {
+            0%, 100% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes legSwingRight {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* 伸展特殊动画 */
+        .stretch-scene .animation-cube {
+            animation: stretchBody 2s ease-in-out infinite;
+        }
+
+        @keyframes stretchBody {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
         /* 进度条 */
         .progress-container {
-            margin-top: 10px;
-            height: 6px;
+            margin-top: 8px;
+            height: 4px;
             background: #e2e8f0;
-            border-radius: 3px;
+            border-radius: 2px;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            border-radius: 3px;
+            border-radius: 2px;
             animation: progressFill 20s linear infinite;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
 
         .exercise-guide:nth-child(1) .progress-bar {
             background: linear-gradient(90deg, #48bb78, #68d391);
-            animation-duration: 20s;
         }
 
         .exercise-guide:nth-child(2) .progress-bar {
             background: linear-gradient(90deg, #667eea, #a3bffa);
             animation-duration: 10s;
-            animation-delay: 0.5s;
         }
 
         .exercise-guide:nth-child(3) .progress-bar {
             background: linear-gradient(90deg, #ed8936, #fbd38d);
             animation-duration: 15s;
-            animation-delay: 1s;
         }
 
         @keyframes progressFill {
@@ -777,7 +985,7 @@
         .exercise-info h4 {
             font-size: 14px;
             color: var(--text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .exercise-info p {
@@ -787,10 +995,10 @@
         }
 
         .exercise-timer {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--primary);
-            min-width: 40px;
+            min-width: 35px;
             text-align: right;
             z-index: 1;
         }
@@ -806,42 +1014,45 @@
             padding: 14px;
         }
 
+        /* 专注完成弹窗 */
+        .focus-complete-modal .modal-icon {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .focus-complete-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .focus-complete-stat {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .focus-complete-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .focus-complete-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
         /* 徽章弹窗 */
-        .badge-modal {
-            background: white;
-            border-radius: 28px;
-            width: 100%;
-            max-width: 320px;
-            padding: 30px;
-            text-align: center;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .badge-modal {
-            transform: scale(1);
-        }
-
-        .badge-modal-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            animation: badgeSpin 1s ease;
-        }
-
-        @keyframes badgeSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
+        .badge-modal .modal-icon {
+            font-size: 48px;
         }
 
         .badge-modal h2 {
             font-size: 22px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
         }
 
         .badge-modal p {
-            font-size: 14px;
-            color: var(--text-secondary);
             margin-bottom: 20px;
         }
 
@@ -876,6 +1087,10 @@
             color: #2d3748;
         }
 
+        .toast.success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
         .safe-area-bottom {
             height: env(safe-area-inset-bottom, 20px);
         }
@@ -897,112 +1112,177 @@
 
         <header class="header">
             <h1>🛡️ 护身小助手</h1>
-            <p>守护你的健康每一次久坐</p>
+            <p>守护健康 · 专注学习</p>
         </header>
 
+        <!-- 模式切换 -->
+        <div class="mode-tabs">
+            <button class="mode-tab active" data-mode="health">
+                <span>💪</span>
+                健康模式
+            </button>
+            <button class="mode-tab" data-mode="focus">
+                <span>🎯</span>
+                专注模式
+            </button>
+        </div>
+
         <main class="main-content">
-            <!-- 计时器卡片 -->
-            <div class="timer-card">
-                <div class="timer-display">
-                    <div class="timer-circle" id="timerCircle">
-                        <span class="timer-time" id="timerDisplay">45:00</span>
-                        <span class="timer-status" id="timerStatus">点击开始</span>
-                    </div>
-                </div>
-
-                <div class="timer-controls">
-                    <button class="btn btn-primary" id="startBtn">开始提醒</button>
-                    <button class="btn btn-secondary" id="pauseBtn" disabled>暂停</button>
-                </div>
-
-                <div class="time-selector">
-                    <h3>选择提醒间隔</h3>
-                    <div class="time-options">
-                        <button class="time-option" data-time="30">30分钟</button>
-                        <button class="time-option active" data-time="45">45分钟</button>
-                        <button class="time-option" data-time="60">60分钟</button>
-                    </div>
-                </div>
-
-                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;">
-                    <button class="btn btn-secondary" id="previewBtn" style="font-size: 14px; padding: 10px 20px;">
-                        🎬 预览动画效果
-                    </button>
-                </div>
-            </div>
-
-            <!-- 统计卡片 -->
-            <div class="stats-card">
-                <div class="stats-header">
-                    <h3>📊 今日数据</h3>
-                    <button class="reset-btn" id="resetBtn">重置</button>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-value" id="remindCount">0</div>
-                        <div class="stat-label">已提醒</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="completeCount">0</div>
-                        <div class="stat-label">已完成</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalMinutes">0</div>
-                        <div class="stat-label">累计分钟</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value streak" id="streakDays">0</div>
-                        <div class="stat-label">连续天数</div>
-                    </div>
-                </div>
-
-                <div class="streak-banner" id="streakBanner">
-                    <div class="streak-info">
-                        <span class="streak-icon">🔥</span>
-                        <div>
-                            <div class="streak-text">连续打卡 <span id="streakCount">0</span> 天</div>
-                            <div class="streak-subtext" id="streakMotiv">继续保持！</div>
+            <!-- ========== 健康模式 ========== -->
+            <div class="mode-content active" id="healthMode">
+                <div class="timer-card">
+                    <div class="timer-display">
+                        <div class="timer-circle" id="timerCircle">
+                            <span class="timer-time" id="timerDisplay">45:00</span>
+                            <span class="timer-status" id="timerStatus">点击开始</span>
                         </div>
                     </div>
-                    <span class="streak-icon">💪</span>
+
+                    <div class="timer-controls">
+                        <button class="btn btn-primary" id="startBtn">开始提醒</button>
+                        <button class="btn btn-secondary" id="pauseBtn" disabled>暂停</button>
+                    </div>
+
+                    <div class="time-selector">
+                        <h3>选择提醒间隔</h3>
+                        <div class="time-options">
+                            <button class="time-option" data-time="30">30分钟</button>
+                            <button class="time-option active" data-time="45">45分钟</button>
+                            <button class="time-option" data-time="60">60分钟</button>
+                        </div>
+                    </div>
+
+                    <div class="preview-btn">
+                        <button class="btn btn-secondary" id="previewBtn">🎬 预览动画</button>
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <div class="stats-header">
+                        <h3>📊 今日数据</h3>
+                        <button class="reset-btn" id="resetBtn">重置</button>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="remindCount">0</div>
+                            <div class="stat-label">已提醒</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="completeCount">0</div>
+                            <div class="stat-label">已完成</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value energy" id="totalMinutes">0</div>
+                            <div class="stat-label">累计分钟</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value streak" id="streakDays">0</div>
+                            <div class="stat-label">连续天数</div>
+                        </div>
+                    </div>
+                    <div class="streak-banner" id="streakBanner">
+                        <div class="streak-info">
+                            <span style="font-size: 24px;">🔥</span>
+                            <div>
+                                <div class="streak-text">连续打卡 <span id="streakCount">0</span> 天</div>
+                                <div style="font-size: 11px; color: #dd6b20;" id="streakMotiv">继续保持！</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 24px;">💪</span>
+                    </div>
+                </div>
+
+                <div class="badges-card">
+                    <div class="badges-header">
+                        <h3>🏆 成就徽章</h3>
+                        <span class="badges-count" id="badgesCount">0/10</span>
+                    </div>
+                    <div class="badges-grid" id="badgesGrid"></div>
+                </div>
+
+                <div class="tips-card">
+                    <h3>💡 久坐健康小贴士</h3>
+                    <div class="tip-item">
+                        <div class="tip-icon eye">👁️</div>
+                        <div class="tip-content">
+                            <h4>眺望远方 20-20-20 法则</h4>
+                            <p>每使用屏幕 20 分钟，看向 20 英尺外的物体，持续 20 秒</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon stretch">🧘</div>
+                        <div class="tip-content">
+                            <h4>颈椎伸展运动</h4>
+                            <p>双手交叉置于脑后，轻轻按压头部，感受颈部拉伸</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon walk">🚶</div>
+                        <div class="tip-content">
+                            <h4>起身走动活化</h4>
+                            <p>站起来走动至少 30 步，活动关节促进血液循环</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 徽章卡片 -->
-            <div class="badges-card">
-                <div class="badges-header">
-                    <h3>🏆 成就徽章</h3>
-                    <span class="badges-count" id="badgesCount">0/10</span>
-                </div>
-                <div class="badges-grid" id="badgesGrid"></div>
-            </div>
+            <!-- ========== 专注模式 ========== -->
+            <div class="mode-content" id="focusMode">
+                <div class="focus-card">
+                    <h3>🎯 专注学习</h3>
+                    <p>锁屏专注，远离手机干扰</p>
 
-            <!-- 健康动作提示 -->
-            <div class="tips-card">
-                <h3>💡 久坐健康小贴士</h3>
+                    <div class="focus-timer-display" id="focusTimerDisplay">25:00</div>
+                    <div class="focus-timer-status" id="focusTimerStatus">选择时长开始专注</div>
 
-                <div class="tip-item">
-                    <div class="tip-icon eye">👁️</div>
-                    <div class="tip-content">
-                        <h4>眺望远方 20-20-20 法则</h4>
-                        <p>每使用屏幕 20 分钟，看向 20 英尺（约 6 米）外的物体，持续 20 秒</p>
+                    <div class="focus-progress-bar">
+                        <div class="focus-progress-fill" id="focusProgressFill" style="width: 0%"></div>
+                    </div>
+
+                    <div class="time-selector" style="border-top: none; padding-top: 0; margin-top: 0;">
+                        <h3 style="color: rgba(255,255,255,0.6);">专注时长</h3>
+                        <div class="time-options">
+                            <button class="time-option" data-focus="25">25分钟</button>
+                            <button class="time-option active" data-focus="45">45分钟</button>
+                            <button class="time-option" data-focus="60">60分钟</button>
+                        </div>
+                    </div>
+
+                    <div class="focus-reason">
+                        <input type="text" class="focus-reason-input" id="focusReason" placeholder="📝 我要专注做..." maxlength="30">
+                    </div>
+
+                    <div class="focus-controls">
+                        <button class="btn btn-focus-start" id="focusStartBtn">🚀 开始专注</button>
+                        <button class="btn btn-focus-cancel" id="focusCancelBtn" style="display: none;">取消</button>
                     </div>
                 </div>
 
-                <div class="tip-item">
-                    <div class="tip-icon stretch">🧘</div>
-                    <div class="tip-content">
-                        <h4>颈椎伸展运动</h4>
-                        <p>双手交叉置于脑后，轻轻向下按压头部，感受颈部后侧拉伸，保持 15 秒</p>
+                <div class="game-card">
+                    <h3>🌱 专注小精灵</h3>
+                    <div class="pet-container">
+                        <span class="pet-emoji" id="petEmoji">🌱</span>
+                        <span class="pet-level">Lv.<span id="petLevel">1</span></span>
                     </div>
+                    <div class="pet-stats">
+                        <div class="pet-stat">
+                            <div class="pet-stat-value" id="focusCount">0</div>
+                            <div class="pet-stat-label">专注次数</div>
+                        </div>
+                        <div class="pet-stat">
+                            <div class="pet-stat-value" id="focusMinutes">0</div>
+                            <div class="pet-stat-label">累计分钟</div>
+                        </div>
+                    </div>
+                    <button class="pet-feed-btn" id="feedPetBtn">🍎 喂养小精灵</button>
                 </div>
 
-                <div class="tip-item">
-                    <div class="tip-icon walk">🚶</div>
-                    <div class="tip-content">
-                        <h4>起身走动活化</h4>
-                        <p>站起来走动至少 30 步，活动髋关节和膝关节，促进血液循环</p>
+                <div class="badges-card">
+                    <div class="badges-header">
+                        <h3>🏅 专注成就</h3>
+                        <span class="badges-count" id="focusBadgesCount">0/8</span>
                     </div>
+                    <div class="focus-badges" id="focusBadgesGrid"></div>
                 </div>
             </div>
         </main>
@@ -1010,32 +1290,25 @@
         <div class="safe-area-bottom"></div>
     </div>
 
-    <!-- 提醒弹窗 -->
+    <!-- 健康提醒弹窗 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-icon">⏰</div>
             <h2>休息一下！</h2>
             <p>你已经久坐 <span id="sitMinutes">45</span> 分钟了</p>
 
-            <!-- 3D 动画引导区域 -->
             <div class="exercise-guides">
-                <!-- 眺望远方 -->
                 <div class="exercise-guide">
                     <div class="action-glow"></div>
-                    <div class="animation-scene eye-scene">
+                    <div class="animation-scene">
                         <div class="animation-cube">
                             <svg class="person-3d" viewBox="0 0 60 70">
-                                <!-- 头 -->
                                 <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
-                                <!-- 眼睛 -->
                                 <ellipse class="eye-ball" cx="25" cy="13" rx="3" ry="3"/>
                                 <ellipse class="eye-ball" cx="35" cy="13" rx="3" ry="3"/>
-                                <!-- 身体 -->
                                 <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
-                                <!-- 手臂 -->
                                 <rect class="person-arm left" x="8" y="30" width="14" height="6" rx="3"/>
                                 <rect class="person-arm right" x="38" y="30" width="14" height="6" rx="3"/>
-                                <!-- 腿部 -->
                                 <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
                                 <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
                             </svg>
@@ -1051,23 +1324,17 @@
                     <span class="exercise-timer">20s</span>
                 </div>
 
-                <!-- 颈椎伸展 -->
                 <div class="exercise-guide">
                     <div class="action-glow"></div>
                     <div class="animation-scene stretch-scene">
                         <div class="animation-cube">
                             <svg class="person-3d" viewBox="0 0 60 70">
-                                <!-- 头 -->
                                 <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
-                                <!-- 眼睛（闭眼享受） -->
                                 <path d="M22 13 Q25 16 28 13" stroke="#2d3748" stroke-width="2" fill="none"/>
                                 <path d="M32 13 Q35 16 38 13" stroke="#2d3748" stroke-width="2" fill="none"/>
-                                <!-- 身体（伸展） -->
                                 <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
-                                <!-- 手臂（向上伸展） -->
                                 <rect class="person-arm left" x="6" y="18" width="6" height="16" rx="3" transform="rotate(-30 10 18)"/>
                                 <rect class="person-arm right" x="48" y="18" width="6" height="16" rx="3" transform="rotate(30 50 18)"/>
-                                <!-- 腿部 -->
                                 <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
                                 <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
                             </svg>
@@ -1083,23 +1350,17 @@
                     <span class="exercise-timer">10s</span>
                 </div>
 
-                <!-- 起身走动 -->
                 <div class="exercise-guide">
                     <div class="action-glow"></div>
-                    <div class="animation-scene walk-scene">
+                    <div class="animation-scene">
                         <div class="animation-cube">
                             <svg class="person-3d" viewBox="0 0 60 70">
-                                <!-- 头 -->
                                 <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
-                                <!-- 眼睛 -->
                                 <ellipse class="eye-ball" cx="25" cy="13" rx="3" ry="3"/>
                                 <ellipse class="eye-ball" cx="35" cy="13" rx="3" ry="3"/>
-                                <!-- 身体（走路姿态） -->
                                 <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
-                                <!-- 手臂（摆动） -->
-                                <rect class="person-arm left" x="8" y="30" width="14" height="6" rx="3" style="animation-delay: 0s;"/>
-                                <rect class="person-arm right" x="38" y="30" width="14" height="6" rx="3" style="animation-delay: 0.5s;"/>
-                                <!-- 腿部（走路） -->
+                                <rect class="person-arm left" x="8" y="30" width="14" height="6" rx="3"/>
+                                <rect class="person-arm right" x="38" y="30" width="14" height="6" rx="3"/>
                                 <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
                                 <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
                             </svg>
@@ -1123,35 +1384,92 @@
         </div>
     </div>
 
-    <!-- 徽章解锁弹窗 -->
+    <!-- 专注完成弹窗 -->
+    <div class="modal-overlay" id="focusCompleteModal">
+        <div class="modal focus-complete-modal">
+            <div class="modal-icon">🎉</div>
+            <h2>专注完成！</h2>
+            <p>太棒了，你完成了一次专注！</p>
+
+            <div class="focus-complete-stats">
+                <div class="focus-complete-stat">
+                    <div class="focus-complete-stat-value" id="focusCompleteTime">45</div>
+                    <div class="focus-complete-stat-label">专注分钟</div>
+                </div>
+                <div class="focus-complete-stat">
+                    <div class="focus-complete-stat-value" id="focusTotalTimes">1</div>
+                    <div class="focus-complete-stat-label">累计次数</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="focusCompleteClose">继续加油 💪</button>
+        </div>
+    </div>
+
+    <!-- 徽章弹窗 -->
     <div class="modal-overlay" id="badgeModalOverlay">
-        <div class="badge-modal">
-            <div class="badge-modal-icon" id="badgeModalIcon">🏆</div>
+        <div class="modal badge-modal">
+            <div class="modal-icon" id="badgeModalIcon">🏆</div>
             <h2 id="badgeModalTitle">新徽章解锁！</h2>
             <p id="badgeModalDesc">恭喜你获得了一枚新徽章！</p>
             <button class="btn btn-primary" id="badgeModalClose">太棒了！</button>
         </div>
     </div>
 
+    <!-- 专注锁屏 -->
+    <div class="focus-lock-overlay" id="focusLockOverlay">
+        <div class="focus-lock-icon">🔒</div>
+        <div class="focus-lock-title">专注中...</div>
+        <div class="focus-lock-subtitle">保持专注，不要分心</div>
+
+        <div class="focus-lock-timer" id="focusLockTimer">25:00</div>
+
+        <div class="focus-lock-reason" id="focusLockReason">我要专注做...</div>
+
+        <div class="focus-lock-warning">
+            <p>⚠️ <strong>强制锁定</strong></p>
+            <p>专注期间请将手机放置一旁，专注于当前任务</p>
+        </div>
+
+        <button class="btn btn-primary" id="focusGiveUpBtn" style="background: rgba(237, 100, 100, 0.8);">
+            😔 实在坚持不住
+        </button>
+
+        <div class="focus-lock-quit" id="focusLockQuit">专注时间结束后自动解锁</div>
+    </div>
+
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // 徽章定义
-        const BADGES = [
-            { id: 'first_complete', name: '初次打卡', icon: '🌱', condition: 'completeCount >= 1', desc: '完成第一次健康提醒' },
-            { id: 'five_complete', name: '健康达人', icon: '⭐', condition: 'completeCount >= 5', desc: '累计完成5次提醒' },
-            { id: 'ten_complete', name: '健康专家', icon: '🏅', condition: 'completeCount >= 10', desc: '累计完成10次提醒' },
-            { id: 'twenty_complete', name: '健康大师', icon: '🏆', condition: 'completeCount >= 20', desc: '累计完成20次提醒' },
-            { id: 'streak_3', name: '三天坚持', icon: '🔥', condition: 'streakDays >= 3', desc: '连续打卡3天' },
-            { id: 'streak_7', name: '一周战士', icon: '💪', condition: 'streakDays >= 7', desc: '连续打卡7天' },
-            { id: 'streak_30', name: '月度冠军', icon: '👑', condition: 'streakDays >= 30', desc: '连续打卡30天' },
-            { id: 'look_count', name: '护眼达人', icon: '👁️', condition: 'lookCount >= 20', desc: '眺望远方20次' },
-            { id: 'stretch_count', name: '柔韧高手', icon: '🧘', condition: 'stretchCount >= 20', desc: '颈椎伸展20次' },
-            { id: 'walk_count', name: '行走侠客', icon: '🚶', condition: 'walkCount >= 20', desc: '起身走动20次' },
+        // ========== 徽章定义 ==========
+        const HEALTH_BADGES = [
+            { id: 'first_complete', name: '初次打卡', icon: '🌱', condition: 'state.completeCount >= 1', desc: '完成第一次健康提醒' },
+            { id: 'five_complete', name: '健康达人', icon: '⭐', condition: 'state.completeCount >= 5', desc: '累计完成5次' },
+            { id: 'ten_complete', name: '健康专家', icon: '🏅', condition: 'state.completeCount >= 10', desc: '累计完成10次' },
+            { id: 'twenty_complete', name: '健康大师', icon: '🏆', condition: 'state.completeCount >= 20', desc: '累计完成20次' },
+            { id: 'streak_3', name: '三天坚持', icon: '🔥', condition: 'state.streakDays >= 3', desc: '连续打卡3天' },
+            { id: 'streak_7', name: '一周战士', icon: '💪', condition: 'state.streakDays >= 7', desc: '连续打卡7天' },
+            { id: 'streak_30', name: '月度冠军', icon: '👑', condition: 'state.streakDays >= 30', desc: '连续打卡30天' },
+            { id: 'look_count', name: '护眼达人', icon: '👁️', condition: 'state.lookCount >= 20', desc: '眺望远方20次' },
+            { id: 'stretch_count', name: '柔韧高手', icon: '🧘', condition: 'state.stretchCount >= 20', desc: '颈椎伸展20次' },
+            { id: 'walk_count', name: '行走侠客', icon: '🚶', condition: 'state.walkCount >= 20', desc: '起身走动20次' },
         ];
 
-        // 状态管理
+        const FOCUS_BADGES = [
+            { id: 'first_focus', name: '初次专注', icon: '🌟', condition: 'focusState.focusCount >= 1', desc: '完成第一次专注' },
+            { id: 'five_focus', name: '专注新手', icon: '📚', condition: 'focusState.focusCount >= 5', desc: '累计专注5次' },
+            { id: 'ten_focus', name: '专注达人', icon: '🎯', condition: 'focusState.focusCount >= 10', desc: '累计专注10次' },
+            { id: 'hour_focus', name: '一小时', icon: '⏰', condition: 'focusState.totalMinutes >= 60', desc: '累计专注60分钟' },
+            { id: 'three_hour', name: '三小时', icon: '⏳', condition: 'focusState.totalMinutes >= 180', desc: '累计专注180分钟' },
+            { id: 'ten_hour', name: '十小时', icon: '🏅', condition: 'focusState.totalMinutes >= 600', desc: '累计专注600分钟' },
+            { id: 'pet_feed', name: '喂养达人', icon: '🍎', condition: 'focusState.petFed >= 5', desc: '喂养小精灵5次' },
+            { id: 'pet_evo', name: '精灵进化', icon: '🌸', condition: 'focusState.petLevel >= 3', desc: '小精灵升到3级' },
+        ];
+
+        const PET_STAGES = ['🌱', '🌿', '🌳', '🌸', '🌺', '🌻', '🌷', '🌹'];
+
+        // ========== 健康模式状态 ==========
         const state = {
             isRunning: false,
             selectedTime: 45,
@@ -1168,232 +1486,123 @@
             snoozeTimeout: null
         };
 
-        // DOM 元素
-        const elements = {
-            startBtn: document.getElementById('startBtn'),
-            pauseBtn: document.getElementById('pauseBtn'),
-            timerDisplay: document.getElementById('timerDisplay'),
-            timerStatus: document.getElementById('timerStatus'),
-            timerCircle: document.getElementById('timerCircle'),
-            timeOptions: document.querySelectorAll('.time-option'),
-            modalOverlay: document.getElementById('modalOverlay'),
-            badgeModalOverlay: document.getElementById('badgeModalOverlay'),
-            completeBtn: document.getElementById('completeBtn'),
-            snoozeBtn: document.getElementById('snoozeBtn'),
-            sitMinutes: document.getElementById('sitMinutes'),
-            remindCount: document.getElementById('remindCount'),
-            completeCount: document.getElementById('completeCount'),
-            totalMinutes: document.getElementById('totalMinutes'),
-            streakDays: document.getElementById('streakDays'),
-            streakBanner: document.getElementById('streakBanner'),
-            streakCount: document.getElementById('streakCount'),
-            streakMotiv: document.getElementById('streakMotiv'),
-            resetBtn: document.getElementById('resetBtn'),
-            toast: document.getElementById('toast'),
-            app: document.getElementById('app'),
-            badgesGrid: document.getElementById('badgesGrid'),
-            badgesCount: document.getElementById('badgesCount'),
-            badgeModalIcon: document.getElementById('badgeModalIcon'),
-            badgeModalTitle: document.getElementById('badgeModalTitle'),
-            badgeModalDesc: document.getElementById('badgeModalDesc'),
-            badgeModalClose: document.getElementById('badgeModalClose')
+        // ========== 专注模式状态 ==========
+        const focusState = {
+            isFocusing: false,
+            focusTime: 25,
+            focusRemaining: 25 * 60,
+            focusInterval: null,
+            focusCount: 0,
+            totalMinutes: 0,
+            petLevel: 1,
+            petFed: 0,
+            petExp: 0,
+            unlockedFocusBadges: []
         };
 
-        // 初始化徽章显示
-        function initBadges() {
-            loadStats();
-            renderBadges();
-        }
+        // ========== DOM 元素 ==========
+        const $ = id => document.getElementById(id);
+        const elements = {
+            // 模式切换
+            modeTabs: document.querySelectorAll('.mode-tab'),
+            healthMode: $('healthMode'),
+            focusMode: $('focusMode'),
+            
+            // 健康模式
+            startBtn: $('startBtn'),
+            pauseBtn: $('pauseBtn'),
+            timerDisplay: $('timerDisplay'),
+            timerStatus: $('timerStatus'),
+            timerCircle: $('timerCircle'),
+            timeOptions: document.querySelectorAll('.time-option[data-time]'),
+            previewBtn: $('previewBtn'),
+            
+            // 专注模式
+            focusStartBtn: $('focusStartBtn'),
+            focusCancelBtn: $('focusCancelBtn'),
+            focusTimerDisplay: $('focusTimerDisplay'),
+            focusTimerStatus: $('focusTimerStatus'),
+            focusProgressFill: $('focusProgressFill'),
+            focusReason: $('focusReason'),
+            focusOptions: document.querySelectorAll('.time-option[data-focus]'),
+            
+            // 宠物
+            petEmoji: $('petEmoji'),
+            petLevel: $('petLevel'),
+            focusCount: $('focusCount'),
+            focusMinutes: $('focusMinutes'),
+            feedPetBtn: $('feedPetBtn'),
+            
+            // 弹窗
+            modalOverlay: $('modalOverlay'),
+            completeBtn: $('completeBtn'),
+            snoozeBtn: $('snoozeBtn'),
+            sitMinutes: $('sitMinutes'),
+            
+            focusCompleteModal: $('focusCompleteModal'),
+            focusCompleteClose: $('focusCompleteClose'),
+            
+            badgeModalOverlay: $('badgeModalOverlay'),
+            badgeModalIcon: $('badgeModalIcon'),
+            badgeModalTitle: $('badgeModalTitle'),
+            badgeModalDesc: $('badgeModalDesc'),
+            badgeModalClose: $('badgeModalClose'),
+            
+            focusLockOverlay: $('focusLockOverlay'),
+            focusLockTimer: $('focusLockTimer'),
+            focusLockReason: $('focusLockReason'),
+            focusGiveUpBtn: $('focusGiveUpBtn'),
+            
+            // 统计
+            remindCount: $('remindCount'),
+            completeCount: $('completeCount'),
+            totalMinutes: $('totalMinutes'),
+            streakDays: $('streakDays'),
+            streakBanner: $('streakBanner'),
+            streakCount: $('streakCount'),
+            streakMotiv: $('streakMotiv'),
+            resetBtn: $('resetBtn'),
+            badgesGrid: $('badgesGrid'),
+            badgesCount: $('badgesCount'),
+            focusBadgesGrid: $('focusBadgesGrid'),
+            focusBadgesCount: $('focusBadgesCount'),
+            
+            toast: $('toast'),
+            app: $('app')
+        };
 
-        function renderBadges() {
-            elements.badgesGrid.innerHTML = BADGES.map(badge => {
-                const unlocked = state.unlockedBadges.includes(badge.id);
-                return `
-                    <div class="badge-item ${unlocked ? 'unlocked' : 'locked'}" data-badge="${badge.id}">
-                        <div class="badge-icon">${badge.icon}</div>
-                        <div class="badge-name">${badge.name}</div>
-                    </div>
-                `;
-            }).join('');
-
-            elements.badgesCount.textContent = `${state.unlockedBadges.length}/${BADGES.length}`;
-        }
-
-        // 检查并解锁徽章
-        function checkBadges() {
-            let newBadge = null;
-
-            for (const badge of BADGES) {
-                if (state.unlockedBadges.includes(badge.id)) continue;
-
-                let conditionMet = false;
-                try {
-                    conditionMet = eval(badge.condition);
-                } catch (e) {
-                    console.error('Badge condition error:', e);
-                }
-
-                if (conditionMet) {
-                    state.unlockedBadges.push(badge.id);
-                    newBadge = badge;
-
-                    const badgeEl = document.querySelector(`[data-badge="${badge.id}"]`);
-                    if (badgeEl) {
-                        badgeEl.classList.remove('locked');
-                        badgeEl.classList.add('unlocked');
-                    }
-                }
-            }
-
-            elements.badgesCount.textContent = `${state.unlockedBadges.length}/${BADGES.length}`;
-
-            if (newBadge) {
-                showBadgeModal(newBadge);
-            }
-        }
-
-        function showBadgeModal(badge) {
-            elements.badgeModalIcon.textContent = badge.icon;
-            elements.badgeModalTitle.textContent = `🎉 ${badge.name}`;
-            elements.badgeModalDesc.textContent = badge.desc;
-            elements.badgeModalOverlay.classList.add('active');
-            showToast(`🏆 解锁新徽章：${badge.name}！`, 'badge');
-        }
-
-        // 格式化时间
+        // ========== 工具函数 ==========
         function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
-        // 显示 Toast
         function showToast(message, type = '') {
             elements.toast.textContent = message;
             elements.toast.className = 'toast' + (type ? ' ' + type : '') + ' show';
-            setTimeout(() => {
-                elements.toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => elements.toast.classList.remove('show'), 3000);
         }
 
-        // 触发震动
         function vibrate() {
-            if ('vibrate' in navigator) {
-                navigator.vibrate([500, 200, 500]);
-            }
+            if ('vibrate' in navigator) navigator.vibrate([500, 200, 500]);
         }
 
-        // 播放提示音
-        function playSound() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
+        // ========== 模式切换 ==========
+        elements.modeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                elements.modeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const mode = tab.dataset.mode;
+                elements.healthMode.classList.toggle('active', mode === 'health');
+                elements.focusMode.classList.toggle('active', mode === 'focus');
+            });
+        });
 
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-
-                oscillator.frequency.value = 880;
-                oscillator.type = 'sine';
-                gainNode.gain.value = 0.3;
-
-                oscillator.start();
-
-                setTimeout(() => oscillator.frequency.value = 1100, 300);
-                setTimeout(() => oscillator.frequency.value = 880, 600);
-                setTimeout(() => oscillator.stop(), 900);
-            } catch (e) {
-                console.log('Audio not supported');
-            }
-        }
-
-        // 显示提醒弹窗
-        function showReminder() {
-            state.remindCount++;
-            elements.sitMinutes.textContent = state.selectedTime;
-            elements.remindCount.textContent = state.remindCount;
-
-            vibrate();
-            playSound();
-
-            elements.app.classList.add('shaking');
-            setTimeout(() => elements.app.classList.remove('shaking'), 500);
-
-            elements.modalOverlay.classList.add('active');
-        }
-
-        // 隐藏提醒弹窗
-        function hideReminder() {
-            elements.modalOverlay.classList.remove('active');
-        }
-
-        // 完成提醒
-        function completeReminder() {
-            state.completeCount++;
-            state.totalMinutes += state.selectedTime;
-            state.lookCount++;
-            state.stretchCount++;
-            state.walkCount++;
-
-            elements.completeCount.textContent = state.completeCount;
-            elements.totalMinutes.textContent = state.totalMinutes;
-
-            updateStreak();
-            saveStats();
-            checkBadges();
-
-            hideReminder();
-            showToast('太棒了！继续保持 💪');
-
-            state.remainingSeconds = state.selectedTime * 60;
-            updateDisplay();
-        }
-
-        // 更新连续打卡
-        function updateStreak() {
-            const today = new Date().toDateString();
-            const lastDate = localStorage.getItem('lastActiveDate');
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toDateString();
-
-            if (lastDate === yesterdayStr) {
-                state.streakDays++;
-            } else if (lastDate !== today) {
-                state.streakDays = 1;
-            }
-
-            localStorage.setItem('lastActiveDate', today);
-            elements.streakDays.textContent = state.streakDays;
-
-            if (state.streakDays >= 3) {
-                elements.streakBanner.classList.add('active');
-                elements.streakCount.textContent = state.streakDays;
-
-                const messages = [
-                    '继续保持！',
-                    '你真的很棒！',
-                    '健康生活，从坚持开始！',
-                    '加油！为了更好的自己！',
-                    '每一天都在变得更好！'
-                ];
-                elements.streakMotiv.textContent = messages[Math.floor(Math.random() * messages.length)];
-            }
-        }
-
-        // 稍后提醒
-        function snoozeReminder() {
-            hideReminder();
-            showToast('5分钟后再次提醒');
-            state.snoozeTimeout = setTimeout(() => {
-                showReminder();
-            }, 5 * 60 * 1000);
-        }
-
-        // 更新显示
-        function updateDisplay() {
+        // ========== 健康模式 ==========
+        function updateHealthDisplay() {
             elements.timerDisplay.textContent = formatTime(state.remainingSeconds);
-
             if (state.isRunning) {
                 elements.timerStatus.textContent = '提醒倒计时中...';
                 elements.timerStatus.classList.add('active');
@@ -1405,117 +1614,267 @@
             }
         }
 
-        // 开始计时
-        function startTimer() {
-            if (state.snoozeTimeout) {
-                clearTimeout(state.snoozeTimeout);
-            }
-
+        function startHealthTimer() {
+            if (state.snoozeTimeout) clearTimeout(state.snoozeTimeout);
             state.isRunning = true;
             elements.startBtn.disabled = true;
             elements.pauseBtn.disabled = false;
-            elements.timeOptions.forEach(opt => opt.style.pointerEvents = 'none');
+            document.querySelectorAll('.time-option[data-time]').forEach(opt => opt.style.pointerEvents = 'none');
 
             state.timerInterval = setInterval(() => {
                 state.remainingSeconds--;
-                updateDisplay();
-
+                updateHealthDisplay();
                 if (state.remainingSeconds <= 0) {
                     clearInterval(state.timerInterval);
-                    showReminder();
+                    showHealthReminder();
                     state.isRunning = false;
                     elements.startBtn.disabled = false;
                     elements.pauseBtn.disabled = true;
-                    elements.timeOptions.forEach(opt => opt.style.pointerEvents = 'auto');
-                    updateDisplay();
+                    document.querySelectorAll('.time-option[data-time]').forEach(opt => opt.style.pointerEvents = 'auto');
+                    updateHealthDisplay();
                 }
             }, 1000);
-
-            updateDisplay();
+            updateHealthDisplay();
         }
 
-        // 暂停计时
-        function pauseTimer() {
+        function pauseHealthTimer() {
             clearInterval(state.timerInterval);
             state.isRunning = false;
             elements.startBtn.disabled = false;
             elements.pauseBtn.disabled = true;
-            elements.timeOptions.forEach(opt => opt.style.pointerEvents = 'auto');
-            updateDisplay();
+            document.querySelectorAll('.time-option[data-time]').forEach(opt => opt.style.pointerEvents = 'auto');
+            updateHealthDisplay();
         }
 
-        // 选择时间
-        function selectTime(minutes) {
-            if (state.isRunning) return;
-
-            state.selectedTime = minutes;
-            state.remainingSeconds = minutes * 60;
-
-            elements.timeOptions.forEach(opt => {
-                opt.classList.toggle('active', parseInt(opt.dataset.time) === minutes);
-            });
-
-            updateDisplay();
+        function showHealthReminder() {
+            state.remindCount++;
+            elements.sitMinutes.textContent = state.selectedTime;
+            elements.remindCount.textContent = state.remindCount;
+            vibrate();
+            elements.app.classList.add('shaking');
+            setTimeout(() => elements.app.classList.remove('shaking'), 500);
+            elements.modalOverlay.classList.add('active');
         }
 
-        // 重置统计
-        function resetStats() {
-            state.remindCount = 0;
-            state.completeCount = 0;
-            state.totalMinutes = 0;
-            state.lookCount = 0;
-            state.stretchCount = 0;
-            state.walkCount = 0;
-            state.streakDays = 0;
+        function completeHealthReminder() {
+            state.completeCount++;
+            state.totalMinutes += state.selectedTime;
+            state.lookCount++;
+            state.stretchCount++;
+            state.walkCount++;
 
-            elements.remindCount.textContent = '0';
-            elements.completeCount.textContent = '0';
-            elements.totalMinutes.textContent = '0';
-            elements.streakDays.textContent = '0';
-            elements.streakBanner.classList.remove('active');
+            elements.completeCount.textContent = state.completeCount;
+            elements.totalMinutes.textContent = state.totalMinutes;
 
-            localStorage.removeItem('healthReminderStats');
-            showToast('数据已重置');
+            updateStreak();
+            saveStats();
+            checkHealthBadges();
+
+            elements.modalOverlay.classList.remove('active');
+            showToast('太棒了！继续保持 💪', 'success');
+
+            state.remainingSeconds = state.selectedTime * 60;
+            updateHealthDisplay();
         }
 
-        // 保存统计
-        function saveStats() {
+        function updateStreak() {
             const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('lastActiveDate');
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+
+            if (lastDate === yesterdayStr) state.streakDays++;
+            else if (lastDate !== today) state.streakDays = 1;
+
+            localStorage.setItem('lastActiveDate', today);
+            elements.streakDays.textContent = state.streakDays;
+
+            if (state.streakDays >= 3) {
+                elements.streakBanner.classList.add('active');
+                elements.streakCount.textContent = state.streakDays;
+                const msgs = ['继续保持！', '你真的很棒！', '健康生活从坚持开始！', '加油！', '每一天都在变得更好！'];
+                elements.streakMotiv.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+            }
+        }
+
+        function snoozeReminder() {
+            elements.modalOverlay.classList.remove('active');
+            showToast('5分钟后再次提醒');
+            state.snoozeTimeout = setTimeout(showHealthReminder, 5 * 60 * 1000);
+        }
+
+        // ========== 徽章系统 ==========
+        function renderBadges() {
+            elements.badgesGrid.innerHTML = HEALTH_BADGES.map(b => {
+                const unlocked = state.unlockedBadges.includes(b.id);
+                return `<div class="badge-item ${unlocked ? 'unlocked' : 'locked'}"><div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div></div>`;
+            }).join('');
+            elements.badgesCount.textContent = `${state.unlockedBadges.length}/${HEALTH_BADGES.length}`;
+
+            elements.focusBadgesGrid.innerHTML = FOCUS_BADGES.map(b => {
+                const unlocked = focusState.unlockedFocusBadges.includes(b.id);
+                return `<div class="focus-badge ${unlocked ? '' : 'locked'}"><div class="focus-badge-icon">${b.icon}</div><div class="focus-badge-name">${b.name}</div></div>`;
+            }).join('');
+            elements.focusBadgesCount.textContent = `${focusState.unlockedFocusBadges.length}/${FOCUS_BADGES.length}`;
+        }
+
+        function checkHealthBadges() {
+            for (const badge of HEALTH_BADGES) {
+                if (state.unlockedBadges.includes(badge.id)) continue;
+                try {
+                    if (eval(badge.condition)) {
+                        state.unlockedBadges.push(badge.id);
+                        const el = elements.badgesGrid.querySelector(`[data-badge="${badge.id}"]`) || 
+                            elements.badgesGrid.children[HEALTH_BADGES.indexOf(badge)];
+                        if (el) el.classList.add('unlocked');
+                        showBadgeModal(badge);
+                    }
+                } catch (e) {}
+            }
+            elements.badgesCount.textContent = `${state.unlockedBadges.length}/${HEALTH_BADGES.length}`;
+        }
+
+        function checkFocusBadges() {
+            for (const badge of FOCUS_BADGES) {
+                if (focusState.unlockedFocusBadges.includes(badge.id)) continue;
+                try {
+                    if (eval(badge.condition)) {
+                        focusState.unlockedFocusBadges.push(badge.id);
+                        showBadgeModal(badge);
+                    }
+                } catch (e) {}
+            }
+            elements.focusBadgesCount.textContent = `${focusState.unlockedFocusBadges.length}/${FOCUS_BADGES.length}`;
+            renderBadges();
+        }
+
+        function showBadgeModal(badge) {
+            elements.badgeModalIcon.textContent = badge.icon;
+            elements.badgeModalTitle.textContent = `🎉 ${badge.name}`;
+            elements.badgeModalDesc.textContent = badge.desc;
+            elements.badgeModalOverlay.classList.add('active');
+            showToast(`🏆 解锁新徽章：${badge.name}！`, 'badge');
+        }
+
+        // ========== 专注模式 ==========
+        function updateFocusDisplay() {
+            elements.focusTimerDisplay.textContent = formatTime(focusState.focusRemaining);
+            const progress = ((focusState.focusTime * 60 - focusState.focusRemaining) / (focusState.focusTime * 60)) * 100;
+            elements.focusProgressFill.style.width = `${progress}%`;
+
+            if (focusState.isFocusing) {
+                elements.focusTimerStatus.textContent = '专注中...保持住！';
+                elements.focusStartBtn.style.display = 'none';
+                elements.focusCancelBtn.style.display = 'block';
+            } else {
+                elements.focusTimerStatus.textContent = '选择时长开始专注';
+                elements.focusStartBtn.style.display = 'block';
+                elements.focusCancelBtn.style.display = 'none';
+            }
+        }
+
+        function startFocus() {
+            if (!elements.focusReason.value.trim()) {
+                showToast('请先输入你要专注做的事情 📝');
+                return;
+            }
+
+            focusState.isFocusing = true;
+            focusState.focusRemaining = focusState.focusTime * 60;
+
+            elements.focusLockTimer.textContent = formatTime(focusState.focusRemaining);
+            elements.focusLockReason.textContent = `📝 ${elements.focusReason.value}`;
+            elements.focusLockOverlay.classList.add('active');
+
+            focusState.focusInterval = setInterval(() => {
+                focusState.focusRemaining--;
+                elements.focusLockTimer.textContent = formatTime(focusState.focusRemaining);
+                updateFocusDisplay();
+
+                if (focusState.focusRemaining <= 0) {
+                    completeFocus();
+                }
+            }, 1000);
+
+            updateFocusDisplay();
+        }
+
+        function completeFocus() {
+            clearInterval(focusState.focusInterval);
+            focusState.isFocusing = false;
+            focusState.focusCount++;
+            focusState.totalMinutes += focusState.focusTime;
+            focusState.petExp += focusState.focusTime;
+            focusState.petFed++;
+
+            // 升级检查
+            const expNeeded = focusState.petLevel * 50;
+            if (focusState.petExp >= expNeeded) {
+                focusState.petLevel = Math.min(focusState.petLevel + 1, PET_STAGES.length);
+                focusState.petExp -= expNeeded;
+                showToast(`🌟 小精灵升级了！现在是 ${PET_STAGES[focusState.petLevel - 1]}`, 'success');
+            }
+
+            elements.focusLockOverlay.classList.remove('active');
+
+            $('focusCompleteTime').textContent = focusState.focusTime;
+            $('focusTotalTimes').textContent = focusState.focusCount;
+            elements.focusCompleteModal.classList.add('active');
+
+            updatePetDisplay();
+            checkFocusBadges();
+            saveFocusStats();
+            updateFocusDisplay();
+        }
+
+        function cancelFocus() {
+            clearInterval(focusState.focusInterval);
+            focusState.isFocusing = false;
+            elements.focusLockOverlay.classList.remove('active');
+            showToast('专注已取消');
+            updateFocusDisplay();
+        }
+
+        function updatePetDisplay() {
+            elements.petEmoji.textContent = PET_STAGES[focusState.petLevel - 1] || '🌱';
+            elements.petLevel.textContent = focusState.petLevel;
+            elements.focusCount.textContent = focusState.focusCount;
+            elements.focusMinutes.textContent = focusState.totalMinutes;
+        }
+
+        function feedPet() {
+            focusState.petFed++;
+            focusState.petExp += 5;
+            const expNeeded = focusState.petLevel * 50;
+            if (focusState.petExp >= expNeeded && focusState.petLevel < PET_STAGES.length) {
+                focusState.petLevel++;
+                focusState.petExp = 0;
+                showToast(`🌸 小精灵进化成 ${PET_STAGES[focusState.petLevel - 1]} 了！`, 'success');
+            }
+            updatePetDisplay();
+            checkFocusBadges();
+            saveFocusStats();
+        }
+
+        // ========== 数据存储 ==========
+        function saveStats() {
             localStorage.setItem('healthReminderStats', JSON.stringify({
-                date: today,
-                remindCount: state.remindCount,
-                completeCount: state.completeCount,
-                totalMinutes: state.totalMinutes,
-                streakDays: state.streakDays,
-                lookCount: state.lookCount,
-                stretchCount: state.stretchCount,
-                walkCount: state.walkCount,
-                unlockedBadges: state.unlockedBadges
+                date: new Date().toDateString(),
+                ...state
             }));
         }
 
-        // 加载统计
         function loadStats() {
             const saved = localStorage.getItem('healthReminderStats');
             if (saved) {
                 const data = JSON.parse(saved);
-                const today = new Date().toDateString();
-
-                if (data.date === today) {
-                    state.remindCount = data.remindCount || 0;
-                    state.completeCount = data.completeCount || 0;
-                    state.totalMinutes = data.totalMinutes || 0;
-                    state.streakDays = data.streakDays || 0;
-                    state.lookCount = data.lookCount || 0;
-                    state.stretchCount = data.stretchCount || 0;
-                    state.walkCount = data.walkCount || 0;
-                    state.unlockedBadges = data.unlockedBadges || [];
-
+                if (data.date === new Date().toDateString()) {
+                    Object.assign(state, data);
                     elements.remindCount.textContent = state.remindCount;
                     elements.completeCount.textContent = state.completeCount;
                     elements.totalMinutes.textContent = state.totalMinutes;
                     elements.streakDays.textContent = state.streakDays;
-
                     if (state.streakDays >= 3) {
                         elements.streakBanner.classList.add('active');
                         elements.streakCount.textContent = state.streakDays;
@@ -1524,31 +1883,87 @@
             }
         }
 
-        // 绑定事件
-        elements.startBtn.addEventListener('click', startTimer);
-        elements.pauseBtn.addEventListener('click', pauseTimer);
-        elements.completeBtn.addEventListener('click', completeReminder);
-        elements.snoozeBtn.addEventListener('click', snoozeReminder);
-        elements.resetBtn.addEventListener('click', resetStats);
-        elements.badgeModalClose.addEventListener('click', () => {
-            elements.badgeModalOverlay.classList.remove('active');
-        });
+        function saveFocusStats() {
+            localStorage.setItem('focusStats', JSON.stringify(focusState));
+        }
 
-        elements.timeOptions.forEach(opt => {
+        function loadFocusStats() {
+            const saved = localStorage.getItem('focusStats');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(focusState, data);
+                updatePetDisplay();
+            }
+        }
+
+        function resetAll() {
+            state.remindCount = 0;
+            state.completeCount = 0;
+            state.totalMinutes = 0;
+            state.lookCount = 0;
+            state.stretchCount = 0;
+            state.walkCount = 0;
+            state.streakDays = 0;
+            elements.remindCount.textContent = '0';
+            elements.completeCount.textContent = '0';
+            elements.totalMinutes.textContent = '0';
+            elements.streakDays.textContent = '0';
+            elements.streakBanner.classList.remove('active');
+            localStorage.removeItem('healthReminderStats');
+            showToast('数据已重置');
+        }
+
+        // ========== 事件绑定 ==========
+        elements.startBtn.addEventListener('click', startHealthTimer);
+        elements.pauseBtn.addEventListener('click', pauseHealthTimer);
+        elements.completeBtn.addEventListener('click', completeHealthReminder);
+        elements.snoozeBtn.addEventListener('click', snoozeReminder);
+        elements.resetBtn.addEventListener('click', resetAll);
+
+        document.querySelectorAll('.time-option[data-time]').forEach(opt => {
             opt.addEventListener('click', () => {
-                selectTime(parseInt(opt.dataset.time));
+                if (state.isRunning) return;
+                state.selectedTime = parseInt(opt.dataset.time);
+                state.remainingSeconds = state.selectedTime * 60;
+                document.querySelectorAll('.time-option[data-time]').forEach(o => o.classList.toggle('active', o === opt));
+                updateHealthDisplay();
             });
         });
 
-        // 预览动画按钮
-        document.getElementById('previewBtn').addEventListener('click', () => {
+        elements.previewBtn.addEventListener('click', () => {
             elements.sitMinutes.textContent = state.selectedTime;
             elements.modalOverlay.classList.add('active');
         });
 
-        // 初始化
-        initBadges();
-        updateDisplay();
+        elements.focusStartBtn.addEventListener('click', startFocus);
+        elements.focusCancelBtn.addEventListener('click', cancelFocus);
+        elements.focusGiveUpBtn.addEventListener('click', cancelFocus);
+        elements.focusCompleteClose.addEventListener('click', () => {
+            elements.focusCompleteModal.classList.remove('active');
+        });
+
+        document.querySelectorAll('.time-option[data-focus]').forEach(opt => {
+            opt.addEventListener('click', () => {
+                if (focusState.isFocusing) return;
+                focusState.focusTime = parseInt(opt.dataset.focus);
+                focusState.focusRemaining = focusState.focusTime * 60;
+                document.querySelectorAll('.time-option[data-focus]').forEach(o => o.classList.toggle('active', o === opt));
+                updateFocusDisplay();
+            });
+        });
+
+        elements.feedPetBtn.addEventListener('click', feedPet);
+        elements.badgeModalClose.addEventListener('click', () => {
+            elements.badgeModalOverlay.classList.remove('active');
+        });
+
+        // ========== 初始化 ==========
+        loadStats();
+        loadFocusStats();
+        renderBadges();
+        updateHealthDisplay();
+        updateFocusDisplay();
+        updatePetDisplay();
     </script>
 </body>
 </html>

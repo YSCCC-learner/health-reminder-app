@@ -28,9 +28,6 @@
             --text-secondary: #718096;
             --success: #48bb78;
             --warning: #ed8936;
-            --gold: #f6e05e;
-            --silver: #a0aec0;
-            --bronze: #ed8936;
         }
 
         body {
@@ -307,14 +304,13 @@
             padding: 12px 16px;
             background: linear-gradient(135deg, #fed7aa 0%, #fbd38d 100%);
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             display: none;
         }
 
         .streak-banner.active {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .streak-info {
@@ -540,11 +536,12 @@
             margin-bottom: 20px;
         }
 
-        /* 动画引导区域 */
+        /* 3D 动画引导区域 */
         .exercise-guides {
             margin-bottom: 20px;
         }
 
+        /* 3D 动画容器 */
         .exercise-guide {
             display: flex;
             align-items: center;
@@ -554,91 +551,227 @@
             border-radius: 16px;
             margin-bottom: 10px;
             text-align: left;
+            position: relative;
+            overflow: hidden;
         }
 
         .exercise-guide:last-child {
             margin-bottom: 0;
         }
 
-        .exercise-animation {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
+        /* 3D 动画场景 */
+        .animation-scene {
+            width: 70px;
+            height: 70px;
+            perspective: 300px;
             flex-shrink: 0;
+        }
+
+        .animation-cube {
+            width: 100%;
+            height: 100%;
             position: relative;
+            transform-style: preserve-3d;
+            animation: floatCube 3s ease-in-out infinite;
         }
 
-        .exercise-animation.eye {
-            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+        @keyframes floatCube {
+            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+            50% { transform: translateY(-8px) rotateX(5deg) rotateY(5deg); }
         }
 
-        .exercise-animation.stretch {
-            background: linear-gradient(135deg, #c3dafe 0%, #a3bffa 100%);
+        /* 眼睛动画 */
+        .eye-scene .animation-cube {
+            animation: eyeLook 4s ease-in-out infinite;
         }
 
-        .exercise-animation.walk {
-            background: linear-gradient(135deg, #feebc8 0%, #fbd38d 100%);
+        @keyframes eyeLook {
+            0%, 100% { transform: translateX(0) rotateY(0); }
+            25% { transform: translateX(-10px) rotateY(-15deg); }
+            75% { transform: translateX(10px) rotateY(15deg); }
         }
 
-        /* 动画效果 */
-        .exercise-animation.eye::after {
-            content: '👁️';
-            animation: lookAround 3s ease-in-out infinite;
+        /* 伸展动画 */
+        .stretch-scene .animation-cube {
+            animation: stretchBody 2s ease-in-out infinite;
         }
 
-        .exercise-animation.stretch::after {
-            content: '🧘';
-            animation: stretch 2s ease-in-out infinite;
-        }
-
-        .exercise-animation.walk::after {
-            content: '🚶';
-            animation: walk 1s ease-in-out infinite;
-        }
-
-        @keyframes lookAround {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        @keyframes stretch {
+        @keyframes stretchBody {
             0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.15) rotate(-5deg); }
         }
 
-        @keyframes walk {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        /* 走路动画 */
+        .walk-scene .animation-cube {
+            animation: walkMove 1s ease-in-out infinite;
         }
 
-        /* 动画进度条 */
-        .animation-progress {
-            height: 4px;
+        @keyframes walkMove {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        /* 3D 人物SVG */
+        .person-3d {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        .person-head {
+            fill: #FFE4C4;
+            transform-origin: center;
+        }
+
+        .person-body {
+            fill: var(--primary);
+            transform-origin: center bottom;
+        }
+
+        .person-arm {
+            fill: var(--primary);
+            transform-origin: center top;
+            animation: armSwing 2s ease-in-out infinite;
+        }
+
+        .person-arm.left {
+            animation-delay: 0s;
+        }
+
+        .person-arm.right {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes armSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        /* 眼睛部件动画 */
+        .eye-ball {
+            fill: #2d3748;
+            animation: eyeBlink 3s ease-in-out infinite;
+        }
+
+        @keyframes eyeBlink {
+            0%, 45%, 55%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        /* 腿部走路动画 */
+        .person-leg {
+            fill: #4a5568;
+            transform-origin: center top;
+        }
+
+        .person-leg.left {
+            animation: legSwingLeft 1s ease-in-out infinite;
+        }
+
+        .person-leg.right {
+            animation: legSwingRight 1s ease-in-out infinite;
+        }
+
+        @keyframes legSwingLeft {
+            0%, 100% { transform: rotate(10deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes legSwingRight {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* 动作光效 */
+        .action-glow {
+            position: absolute;
+            top: 50%;
+            left: 35px;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .exercise-guide:nth-child(1) .action-glow {
+            background: radial-gradient(circle, #48bb78, transparent);
+        }
+
+        .exercise-guide:nth-child(2) .action-glow {
+            background: radial-gradient(circle, #667eea, transparent);
+            animation-delay: 0.5s;
+        }
+
+        .exercise-guide:nth-child(3) .action-glow {
+            background: radial-gradient(circle, #ed8936, transparent);
+            animation-delay: 1s;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-50%) scale(1.3); opacity: 0.5; }
+        }
+
+        /* 进度条 */
+        .progress-container {
+            margin-top: 10px;
+            height: 6px;
             background: #e2e8f0;
-            border-radius: 2px;
-            margin-top: 8px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
-        .animation-progress-bar {
+        .progress-bar {
             height: 100%;
-            background: var(--primary);
-            border-radius: 2px;
-            animation: progress 3s linear infinite;
+            border-radius: 3px;
+            animation: progressFill 20s linear infinite;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes progress {
-            from { width: 0%; }
-            to { width: 100%; }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .exercise-guide:nth-child(1) .progress-bar {
+            background: linear-gradient(90deg, #48bb78, #68d391);
+            animation-duration: 20s;
+        }
+
+        .exercise-guide:nth-child(2) .progress-bar {
+            background: linear-gradient(90deg, #667eea, #a3bffa);
+            animation-duration: 10s;
+            animation-delay: 0.5s;
+        }
+
+        .exercise-guide:nth-child(3) .progress-bar {
+            background: linear-gradient(90deg, #ed8936, #fbd38d);
+            animation-duration: 15s;
+            animation-delay: 1s;
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
         }
 
         .exercise-info {
             flex: 1;
+            z-index: 1;
         }
 
         .exercise-info h4 {
@@ -659,6 +792,7 @@
             color: var(--primary);
             min-width: 40px;
             text-align: right;
+            z-index: 1;
         }
 
         .modal-actions {
@@ -834,9 +968,7 @@
                     <h3>🏆 成就徽章</h3>
                     <span class="badges-count" id="badgesCount">0/10</span>
                 </div>
-                <div class="badges-grid" id="badgesGrid">
-                    <!-- 徽章会动态生成 -->
-                </div>
+                <div class="badges-grid" id="badgesGrid"></div>
             </div>
 
             <!-- 健康动作提示 -->
@@ -879,39 +1011,99 @@
             <h2>休息一下！</h2>
             <p>你已经久坐 <span id="sitMinutes">45</span> 分钟了</p>
 
-            <!-- 动画引导区域 -->
+            <!-- 3D 动画引导区域 -->
             <div class="exercise-guides">
+                <!-- 眺望远方 -->
                 <div class="exercise-guide">
-                    <div class="exercise-animation eye"></div>
+                    <div class="action-glow"></div>
+                    <div class="animation-scene eye-scene">
+                        <div class="animation-cube">
+                            <svg class="person-3d" viewBox="0 0 60 70">
+                                <!-- 头 -->
+                                <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
+                                <!-- 眼睛 -->
+                                <ellipse class="eye-ball" cx="25" cy="13" rx="3" ry="3"/>
+                                <ellipse class="eye-ball" cx="35" cy="13" rx="3" ry="3"/>
+                                <!-- 身体 -->
+                                <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
+                                <!-- 手臂 -->
+                                <rect class="person-arm left" x="8" y="30" width="14" height="6" rx="3"/>
+                                <rect class="person-arm right" x="38" y="30" width="14" height="6" rx="3"/>
+                                <!-- 腿部 -->
+                                <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
+                                <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="exercise-info">
                         <h4>眺望远方</h4>
                         <p>看向6米外，持续20秒</p>
-                        <div class="animation-progress">
-                            <div class="animation-progress-bar"></div>
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
                         </div>
                     </div>
                     <span class="exercise-timer">20s</span>
                 </div>
 
+                <!-- 颈椎伸展 -->
                 <div class="exercise-guide">
-                    <div class="exercise-animation stretch"></div>
+                    <div class="action-glow"></div>
+                    <div class="animation-scene stretch-scene">
+                        <div class="animation-cube">
+                            <svg class="person-3d" viewBox="0 0 60 70">
+                                <!-- 头 -->
+                                <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
+                                <!-- 眼睛（闭眼享受） -->
+                                <path d="M22 13 Q25 16 28 13" stroke="#2d3748" stroke-width="2" fill="none"/>
+                                <path d="M32 13 Q35 16 38 13" stroke="#2d3748" stroke-width="2" fill="none"/>
+                                <!-- 身体（伸展） -->
+                                <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
+                                <!-- 手臂（向上伸展） -->
+                                <rect class="person-arm left" x="6" y="18" width="6" height="16" rx="3" transform="rotate(-30 10 18)"/>
+                                <rect class="person-arm right" x="48" y="18" width="6" height="16" rx="3" transform="rotate(30 50 18)"/>
+                                <!-- 腿部 -->
+                                <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
+                                <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="exercise-info">
                         <h4>颈椎伸展</h4>
                         <p>双手交叉后仰，伸展10秒</p>
-                        <div class="animation-progress">
-                            <div class="animation-progress-bar" style="animation-delay: 0.5s;"></div>
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
                         </div>
                     </div>
                     <span class="exercise-timer">10s</span>
                 </div>
 
+                <!-- 起身走动 -->
                 <div class="exercise-guide">
-                    <div class="exercise-animation walk"></div>
+                    <div class="action-glow"></div>
+                    <div class="animation-scene walk-scene">
+                        <div class="animation-cube">
+                            <svg class="person-3d" viewBox="0 0 60 70">
+                                <!-- 头 -->
+                                <ellipse class="person-head" cx="30" cy="15" rx="12" ry="14"/>
+                                <!-- 眼睛 -->
+                                <ellipse class="eye-ball" cx="25" cy="13" rx="3" ry="3"/>
+                                <ellipse class="eye-ball" cx="35" cy="13" rx="3" ry="3"/>
+                                <!-- 身体（走路姿态） -->
+                                <rect class="person-body" x="20" y="28" width="20" height="25" rx="5"/>
+                                <!-- 手臂（摆动） -->
+                                <rect class="person-arm left" x="8" y="30" width="14" height="6" rx="3" style="animation-delay: 0s;"/>
+                                <rect class="person-arm right" x="38" y="30" width="14" height="6" rx="3" style="animation-delay: 0.5s;"/>
+                                <!-- 腿部（走路） -->
+                                <rect class="person-leg left" x="22" y="52" width="7" height="18" rx="3"/>
+                                <rect class="person-leg right" x="31" y="52" width="7" height="18" rx="3"/>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="exercise-info">
                         <h4>起身走动</h4>
                         <p>站起来走30步活动身体</p>
-                        <div class="animation-progress">
-                            <div class="animation-progress-bar" style="animation-delay: 1s;"></div>
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
                         </div>
                     </div>
                     <span class="exercise-timer">30步</span>
@@ -1039,7 +1231,6 @@
                     state.unlockedBadges.push(badge.id);
                     newBadge = badge;
 
-                    // 更新徽章显示
                     const badgeEl = document.querySelector(`[data-badge="${badge.id}"]`);
                     if (badgeEl) {
                         badgeEl.classList.remove('locked');
@@ -1050,7 +1241,6 @@
 
             elements.badgesCount.textContent = `${state.unlockedBadges.length}/${BADGES.length}`;
 
-            // 如果有新徽章，显示弹窗
             if (newBadge) {
                 showBadgeModal(newBadge);
             }
@@ -1061,8 +1251,6 @@
             elements.badgeModalTitle.textContent = `🎉 ${badge.name}`;
             elements.badgeModalDesc.textContent = badge.desc;
             elements.badgeModalOverlay.classList.add('active');
-
-            // 显示特殊 toast
             showToast(`🏆 解锁新徽章：${badge.name}！`, 'badge');
         }
 
@@ -1144,19 +1332,13 @@
             elements.completeCount.textContent = state.completeCount;
             elements.totalMinutes.textContent = state.totalMinutes;
 
-            // 更新连续打卡
             updateStreak();
-
-            // 保存到本地存储
             saveStats();
-
-            // 检查徽章
             checkBadges();
 
             hideReminder();
             showToast('太棒了！继续保持 💪');
 
-            // 重置计时器
             state.remainingSeconds = state.selectedTime * 60;
             updateDisplay();
         }
@@ -1178,12 +1360,10 @@
             localStorage.setItem('lastActiveDate', today);
             elements.streakDays.textContent = state.streakDays;
 
-            // 更新连续打卡 banner
             if (state.streakDays >= 3) {
                 elements.streakBanner.classList.add('active');
                 elements.streakCount.textContent = state.streakDays;
 
-                // 更新鼓励语
                 const messages = [
                     '继续保持！',
                     '你真的很棒！',
@@ -1195,7 +1375,7 @@
             }
         }
 
-        // 稍后提醒（5分钟后）
+        // 稍后提醒
         function snoozeReminder() {
             hideReminder();
             showToast('5分钟后再次提醒');
@@ -1292,7 +1472,7 @@
             showToast('数据已重置');
         }
 
-        // 保存统计到本地存储
+        // 保存统计
         function saveStats() {
             const today = new Date().toDateString();
             localStorage.setItem('healthReminderStats', JSON.stringify({
@@ -1308,7 +1488,7 @@
             }));
         }
 
-        // 加载保存的统计
+        // 加载统计
         function loadStats() {
             const saved = localStorage.getItem('healthReminderStats');
             if (saved) {

@@ -464,9 +464,315 @@
             animation: petBounce 2s ease-in-out infinite;
         }
 
-        @keyframes petBounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
+        /* 猫咪CSS动画 */
+        .cat-pet {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .cat-face {
+            width: 100px;
+            height: 90px;
+            background: linear-gradient(135deg, #ffb347 0%, #ff6b6b 100%);
+            border-radius: 50% 50% 45% 45%;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: catBreathe 3s ease-in-out infinite;
+        }
+
+        @keyframes catBreathe {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.02); }
+        }
+
+        .cat-ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #ff6b6b;
+            top: -15px;
+        }
+
+        .cat-ear.left { left: 10px; transform: rotate(-15deg); }
+        .cat-ear.right { right: 10px; transform: rotate(15deg); }
+
+        .cat-ear::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid #ffb8b8;
+            top: 8px;
+            left: -8px;
+        }
+
+        .cat-eye {
+            position: absolute;
+            width: 22px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 30px;
+            overflow: hidden;
+        }
+
+        .cat-eye.left { left: 22px; }
+        .cat-eye.right { right: 22px; }
+
+        .cat-pupil {
+            width: 14px;
+            height: 18px;
+            background: #2d3748;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: catBlink 4s ease-in-out infinite;
+        }
+
+        @keyframes catBlink {
+            0%, 45%, 55%, 100% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(0.1); }
+        }
+
+        .cat-nose {
+            position: absolute;
+            width: 12px;
+            height: 10px;
+            background: #ff6b6b;
+            border-radius: 50% 50% 40% 40%;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .cat-mouth {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            top: 58px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .cat-mouth::before,
+        .cat-mouth::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            border-bottom: 3px solid #2d3748;
+            border-radius: 0 0 50% 50%;
+            top: 0;
+        }
+
+        .cat-mouth::before { left: 0; }
+        .cat-mouth::after { right: 0; }
+
+        .cat-whisker {
+            position: absolute;
+            width: 25px;
+            height: 2px;
+            background: #2d3748;
+            top: 52px;
+            border-radius: 2px;
+        }
+
+        .cat-whisker.left-1 { left: -5px; transform: rotate(-10deg); }
+        .cat-whisker.left-2 { left: -3px; top: 56px; }
+        .cat-whisker.left-3 { left: -5px; top: 60px; transform: rotate(10deg); }
+        .cat-whisker.right-1 { right: -5px; transform: rotate(10deg); }
+        .cat-whisker.right-2 { right: -3px; top: 56px; }
+        .cat-whisker.right-3 { right: -5px; top: 60px; transform: rotate(-10deg); }
+
+        .cat-blush {
+            position: absolute;
+            width: 18px;
+            height: 10px;
+            background: rgba(255, 150, 150, 0.6);
+            border-radius: 50%;
+            top: 45px;
+        }
+
+        .cat-blush.left { left: 10px; }
+        .cat-blush.right { right: 10px; }
+
+        .cat-body {
+            width: 70px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffb347 0%, #ff6b6b 100%);
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .cat-tail {
+            position: absolute;
+            width: 8px;
+            height: 40px;
+            background: linear-gradient(180deg, #ff6b6b 0%, #ffb347 100%);
+            border-radius: 4px;
+            bottom: 20px;
+            right: 5px;
+            transform-origin: bottom center;
+            animation: tailWag 1s ease-in-out infinite;
+        }
+
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        /* 猫咪状态动画 */
+        .cat-pet.happy .cat-face {
+            animation: catHappy 0.5s ease-in-out;
+        }
+
+        @keyframes catHappy {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        .cat-pet.sleeping .cat-eye .cat-pupil {
+            animation: none;
+            height: 4px;
+            bottom: 8px;
+        }
+
+        .cat-pet.eating .cat-mouth::before,
+        .cat-pet.eating .cat-mouth::after {
+            animation: catEat 0.3s ease-in-out infinite;
+        }
+
+        @keyframes catEat {
+            0%, 100% { border-bottom-width: 3px; }
+            50% { border-bottom-width: 6px; }
+        }
+
+        /* 猫咪心情气泡 */
+        .cat-mood {
+            position: absolute;
+            top: -10px;
+            right: 0;
+            font-size: 30px;
+            animation: moodFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes moodFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-5px) scale(1.1); opacity: 0.8; }
+        }
+
+        .cat-level-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 0;
+            background: linear-gradient(135deg, #f6e05e 0%, #ed8936 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(237, 137, 54, 0.4);
+        }
+
+        .cat-name {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* 猫咪交互按钮 */
+        .cat-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .cat-action-btn {
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cat-action-btn.feed {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            color: white;
+        }
+
+        .cat-action-btn.pet {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cat-action-btn.play {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .cat-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .cat-hunger-bar {
+            background: #edf2f7;
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .cat-hunger-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #f6e05e, #48bb78);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .cat-hunger-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .cat-study-effect {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            opacity: 0;
+            animation: studyEffect 2s ease-out forwards;
+        }
+
+        @keyframes studyEffect {
+            0% { opacity: 0; transform: translateX(-50%) translateY(0); }
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-50px); }
         }
 
         .pet-level {
@@ -1259,22 +1565,56 @@
                 </div>
 
                 <div class="game-card">
-                    <h3>🌱 专注小精灵</h3>
-                    <div class="pet-container">
-                        <span class="pet-emoji" id="petEmoji">🌱</span>
-                        <span class="pet-level">Lv.<span id="petLevel">1</span></span>
+                    <h3>🐱 我的小猫咪</h3>
+                    <div class="cat-pet" id="catPet">
+                        <div class="cat-mood" id="catMood">😺</div>
+                        <div class="cat-face">
+                            <div class="cat-ear left"></div>
+                            <div class="cat-ear right"></div>
+                            <div class="cat-eye left"><div class="cat-pupil"></div></div>
+                            <div class="cat-eye right"><div class="cat-pupil"></div></div>
+                            <div class="cat-nose"></div>
+                            <div class="cat-mouth"></div>
+                            <div class="cat-whisker left-1"></div>
+                            <div class="cat-whisker left-2"></div>
+                            <div class="cat-whisker left-3"></div>
+                            <div class="cat-whisker right-1"></div>
+                            <div class="cat-whisker right-2"></div>
+                            <div class="cat-whisker right-3"></div>
+                            <div class="cat-blush left"></div>
+                            <div class="cat-blush right"></div>
+                        </div>
+                        <div class="cat-body"></div>
+                        <div class="cat-tail"></div>
+                        <span class="cat-level-badge">Lv.<span id="petLevel">1</span></span>
                     </div>
+                    
+                    <div class="cat-name" id="catName">小奶猫</div>
+                    
+                    <div class="cat-hunger-label">
+                        <span>🍖 饱腹度</span>
+                        <span id="catHungerText">80%</span>
+                    </div>
+                    <div class="cat-hunger-bar">
+                        <div class="cat-hunger-fill" id="catHungerFill" style="width: 80%"></div>
+                    </div>
+                    
+                    <div class="cat-actions">
+                        <button class="cat-action-btn feed" id="feedCatBtn">🍖 喂食</button>
+                        <button class="cat-action-btn pet" id="petCatBtn">✋ 摸头</button>
+                        <button class="cat-action-btn play" id="playCatBtn">🎾 玩耍</button>
+                    </div>
+                    
                     <div class="pet-stats">
                         <div class="pet-stat">
                             <div class="pet-stat-value" id="focusCount">0</div>
-                            <div class="pet-stat-label">专注次数</div>
+                            <div class="pet-stat-label">陪伴次数</div>
                         </div>
                         <div class="pet-stat">
                             <div class="pet-stat-value" id="focusMinutes">0</div>
                             <div class="pet-stat-label">累计分钟</div>
                         </div>
                     </div>
-                    <button class="pet-feed-btn" id="feedPetBtn">🍎 喂养小精灵</button>
                 </div>
 
                 <div class="badges-card">
@@ -1388,8 +1728,8 @@
     <div class="modal-overlay" id="focusCompleteModal">
         <div class="modal focus-complete-modal">
             <div class="modal-icon">🎉</div>
-            <h2>专注完成！</h2>
-            <p>太棒了，你完成了一次专注！</p>
+            <h2>🐱 喵喵奖励！</h2>
+            <p>太棒了！你的猫咪很开心哦～</p>
 
             <div class="focus-complete-stats">
                 <div class="focus-complete-stat">
@@ -1398,7 +1738,7 @@
                 </div>
                 <div class="focus-complete-stat">
                     <div class="focus-complete-stat-value" id="focusTotalTimes">1</div>
-                    <div class="focus-complete-stat-label">累计次数</div>
+                    <div class="focus-complete-stat-label">陪伴次数</div>
                 </div>
             </div>
 
@@ -1463,11 +1803,20 @@
             { id: 'hour_focus', name: '一小时', icon: '⏰', condition: 'focusState.totalMinutes >= 60', desc: '累计专注60分钟' },
             { id: 'three_hour', name: '三小时', icon: '⏳', condition: 'focusState.totalMinutes >= 180', desc: '累计专注180分钟' },
             { id: 'ten_hour', name: '十小时', icon: '🏅', condition: 'focusState.totalMinutes >= 600', desc: '累计专注600分钟' },
-            { id: 'pet_feed', name: '喂养达人', icon: '🍎', condition: 'focusState.petFed >= 5', desc: '喂养小精灵5次' },
-            { id: 'pet_evo', name: '精灵进化', icon: '🌸', condition: 'focusState.petLevel >= 3', desc: '小精灵升到3级' },
+            { id: 'cat_feed', name: '铲屎官', icon: '🍖', condition: 'focusState.petLevel >= 2', desc: '猫咪升到2级' },
+            { id: 'cat_evo', name: '猫奴进阶', icon: '😺', condition: 'focusState.petLevel >= 4', desc: '猫咪升到4级' },
         ];
 
-        const PET_STAGES = ['🌱', '🌿', '🌳', '🌸', '🌺', '🌻', '🌷', '🌹'];
+        const CAT_STAGES = [
+            { emoji: '🐱', name: '小奶猫', desc: '刚刚出生' },
+            { emoji: '😺', name: '喵星人', desc: '开始成长' },
+            { emoji: '😸', name: '俏皮猫', desc: '活泼可爱' },
+            { emoji: '😻', name: '阳光猫', desc: '热情洋溢' },
+            { emoji: '😼', name: '机灵猫', desc: '聪明伶俐' },
+            { emoji: '😽', name: '撒娇猫', desc: '超会卖萌' },
+            { emoji: '🙀', name: '学霸猫', desc: '专注达人' },
+            { emoji: '🐈', name: '大橘猫', desc: '学习之王' },
+        ];
 
         // ========== 健康模式状态 ==========
         const state = {
@@ -1495,8 +1844,11 @@
             focusCount: 0,
             totalMinutes: 0,
             petLevel: 1,
-            petFed: 0,
             petExp: 0,
+            catHunger: 80, // 饱腹度 0-100
+            catHappiness: 100, // 开心度
+            catMood: '😺', // 当前心情
+            lastInteraction: Date.now(),
             unlockedFocusBadges: []
         };
 
@@ -1527,11 +1879,17 @@
             focusOptions: document.querySelectorAll('.time-option[data-focus]'),
             
             // 宠物
-            petEmoji: $('petEmoji'),
+            catPet: $('catPet'),
+            catMood: $('catMood'),
             petLevel: $('petLevel'),
+            catName: $('catName'),
+            catHungerFill: $('catHungerFill'),
+            catHungerText: $('catHungerText'),
+            feedCatBtn: $('feedCatBtn'),
+            petCatBtn: $('petCatBtn'),
+            playCatBtn: $('playCatBtn'),
             focusCount: $('focusCount'),
             focusMinutes: $('focusMinutes'),
-            feedPetBtn: $('feedPetBtn'),
             
             // 弹窗
             modalOverlay: $('modalOverlay'),
@@ -1806,15 +2164,22 @@
             focusState.focusCount++;
             focusState.totalMinutes += focusState.focusTime;
             focusState.petExp += focusState.focusTime;
-            focusState.petFed++;
+            focusState.catHunger = Math.max(0, focusState.catHunger - 15); // 专注会饿
+            focusState.catHappiness = Math.min(100, focusState.catHappiness + 20); // 陪伴让猫开心
+            focusState.lastInteraction = Date.now();
 
             // 升级检查
-            const expNeeded = focusState.petLevel * 50;
-            if (focusState.petExp >= expNeeded) {
-                focusState.petLevel = Math.min(focusState.petLevel + 1, PET_STAGES.length);
+            const expNeeded = focusState.petLevel * 60;
+            if (focusState.petExp >= expNeeded && focusState.petLevel < CAT_STAGES.length) {
+                focusState.petLevel++;
                 focusState.petExp -= expNeeded;
-                showToast(`🌟 小精灵升级了！现在是 ${PET_STAGES[focusState.petLevel - 1]}`, 'success');
+                focusState.catHappiness = 100;
+                const newCat = CAT_STAGES[focusState.petLevel - 1];
+                showToast(`🎉 猫咪升级了！现在是 ${newCat.name} ${newCat.emoji}`, 'success');
             }
+
+            // 更新猫咪心情
+            updateCatMood();
 
             elements.focusLockOverlay.classList.remove('active');
 
@@ -1822,7 +2187,10 @@
             $('focusTotalTimes').textContent = focusState.focusCount;
             elements.focusCompleteModal.classList.add('active');
 
-            updatePetDisplay();
+            // 显示学习效果动画
+            showCatEffect('📚');
+
+            updateCatDisplay();
             checkFocusBadges();
             saveFocusStats();
             updateFocusDisplay();
@@ -1836,26 +2204,143 @@
             updateFocusDisplay();
         }
 
-        function updatePetDisplay() {
-            elements.petEmoji.textContent = PET_STAGES[focusState.petLevel - 1] || '🌱';
+        function updateCatDisplay() {
+            const cat = CAT_STAGES[focusState.petLevel - 1] || CAT_STAGES[0];
             elements.petLevel.textContent = focusState.petLevel;
+            elements.catName.textContent = cat.name;
             elements.focusCount.textContent = focusState.focusCount;
             elements.focusMinutes.textContent = focusState.totalMinutes;
+            
+            // 更新饱腹度
+            elements.catHungerFill.style.width = `${focusState.catHunger}%`;
+            elements.catHungerText.textContent = `${Math.round(focusState.catHunger)}%`;
+            
+            // 更新心情
+            updateCatMood();
         }
 
-        function feedPet() {
-            focusState.petFed++;
-            focusState.petExp += 5;
-            const expNeeded = focusState.petLevel * 50;
-            if (focusState.petExp >= expNeeded && focusState.petLevel < PET_STAGES.length) {
-                focusState.petLevel++;
-                focusState.petExp = 0;
-                showToast(`🌸 小精灵进化成 ${PET_STAGES[focusState.petLevel - 1]} 了！`, 'success');
+        function updateCatMood() {
+            let mood = '😺';
+            if (focusState.catHunger < 30) {
+                mood = '😿'; // 饿了不开心
+            } else if (focusState.catHappiness >= 80) {
+                mood = '😸'; // 超开心
+            } else if (focusState.catHappiness >= 50) {
+                mood = '😺'; // 开心
+            } else {
+                mood = '🙀'; // 不开心
             }
-            updatePetDisplay();
+            focusState.catMood = mood;
+            elements.catMood.textContent = mood;
+            
+            // 根据心情调整动画
+            elements.catPet.classList.remove('happy', 'sleeping', 'eating');
+            if (focusState.catHappiness >= 80) {
+                elements.catPet.classList.add('happy');
+            }
+        }
+
+        function showCatEffect(emoji) {
+            const effect = document.createElement('span');
+            effect.className = 'cat-study-effect';
+            effect.textContent = emoji;
+            elements.catPet.appendChild(effect);
+            setTimeout(() => effect.remove(), 2000);
+        }
+
+        function feedCat() {
+            if (focusState.catHunger >= 95) {
+                showToast('猫咪吃饱了！先玩一会儿吧 🐱');
+                return;
+            }
+            
+            focusState.catHunger = Math.min(100, focusState.catHunger + 30);
+            focusState.catHappiness = Math.min(100, focusState.catHappiness + 10);
+            focusState.petExp += 5;
+            focusState.lastInteraction = Date.now();
+            
+            // 吃东西动画
+            elements.catPet.classList.add('eating');
+            setTimeout(() => elements.catPet.classList.remove('eating'), 1000);
+            
+            showCatEffect('🍖');
+            
+            // 检查升级
+            const expNeeded = focusState.petLevel * 60;
+            if (focusState.petExp >= expNeeded && focusState.petLevel < CAT_STAGES.length) {
+                focusState.petLevel++;
+                focusState.petExp -= expNeeded;
+                focusState.catHappiness = 100;
+                const newCat = CAT_STAGES[focusState.petLevel - 1];
+                showToast(`🎉 猫咪升级了！现在是 ${newCat.name} ${newCat.emoji}`, 'success');
+            }
+            
+            updateCatDisplay();
             checkFocusBadges();
             saveFocusStats();
         }
+
+        function petCat() {
+            focusState.catHappiness = Math.min(100, focusState.catHappiness + 15);
+            focusState.lastInteraction = Date.now();
+            
+            // 开心动画
+            elements.catPet.classList.add('happy');
+            setTimeout(() => elements.catPet.classList.remove('happy'), 500);
+            
+            showCatEffect('❤️');
+            showToast('喵～好舒服 😌');
+            
+            updateCatMood();
+            saveFocusStats();
+        }
+
+        function playWithCat() {
+            if (focusState.catHunger < 20) {
+                showToast('猫咪太饿了，先喂点吃的吧 😿');
+                return;
+            }
+            
+            focusState.catHappiness = Math.min(100, focusState.catHappiness + 25);
+            focusState.catHunger = Math.max(0, focusState.catHunger - 10);
+            focusState.petExp += 10;
+            focusState.lastInteraction = Date.now();
+            
+            // 玩耍动画 - 尾巴摇更快
+            const tail = elements.catPet.querySelector('.cat-tail');
+            if (tail) {
+                tail.style.animationDuration = '0.3s';
+                setTimeout(() => tail.style.animationDuration = '1s', 2000);
+            }
+            
+            showCatEffect('🎾');
+            showToast('喵喵喵！好好玩！😸');
+            
+            // 检查升级
+            const expNeeded = focusState.petLevel * 60;
+            if (focusState.petExp >= expNeeded && focusState.petLevel < CAT_STAGES.length) {
+                focusState.petLevel++;
+                focusState.petExp -= expNeeded;
+                focusState.catHappiness = 100;
+                const newCat = CAT_STAGES[focusState.petLevel - 1];
+                showToast(`🎉 猫咪升级了！现在是 ${newCat.name} ${newCat.emoji}`, 'success');
+            }
+            
+            updateCatDisplay();
+            checkFocusBadges();
+            saveFocusStats();
+        }
+
+        // 定时衰减饱腹度（每10分钟-5%）
+        function catHungryTick() {
+            if (focusState.focusCount > 0) {
+                focusState.catHunger = Math.max(0, focusState.catHunger - 2);
+                focusState.catHappiness = Math.max(0, focusState.catHappiness - 1);
+                updateCatMood();
+                updateCatDisplay();
+            }
+        }
+        setInterval(catHungryTick, 600000); // 每10分钟
 
         // ========== 数据存储 ==========
         function saveStats() {
@@ -1892,7 +2377,11 @@
             if (saved) {
                 const data = JSON.parse(saved);
                 Object.assign(focusState, data);
-                updatePetDisplay();
+                // 确保新属性有默认值
+                if (typeof focusState.catHunger !== 'number') focusState.catHunger = 80;
+                if (typeof focusState.catHappiness !== 'number') focusState.catHappiness = 100;
+                if (!focusState.catMood) focusState.catMood = '😺';
+                updateCatDisplay();
             }
         }
 
@@ -1952,7 +2441,9 @@
             });
         });
 
-        elements.feedPetBtn.addEventListener('click', feedPet);
+        elements.feedCatBtn.addEventListener('click', feedCat);
+        elements.petCatBtn.addEventListener('click', petCat);
+        elements.playCatBtn.addEventListener('click', playWithCat);
         elements.badgeModalClose.addEventListener('click', () => {
             elements.badgeModalOverlay.classList.remove('active');
         });
@@ -1963,7 +2454,7 @@
         renderBadges();
         updateHealthDisplay();
         updateFocusDisplay();
-        updatePetDisplay();
+        updateCatDisplay();
     </script>
 </body>
 </html>
